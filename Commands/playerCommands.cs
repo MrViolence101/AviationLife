@@ -19,6 +19,11 @@ namespace core.Commands
 {
     class PlayerCommands
     {
+        [Command("kill")]
+        public static void KillCommand(Player player)
+        {
+            player.Health = 0.0f;
+        }
         [Command("apply")]
         public static void AirlineApplyCommand(Player player, int aid)
         {
