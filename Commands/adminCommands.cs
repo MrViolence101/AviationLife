@@ -24,6 +24,7 @@ namespace core.Commands
 {
     class adminCommands
     {
+
         [Command("setcash")]
         public static void SetCashCommand(Player player, Player receiver, int amount)
         {

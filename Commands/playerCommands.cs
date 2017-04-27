@@ -19,7 +19,6 @@ namespace core.Commands
 {
     class PlayerCommands
     {
-        
         [Command("apply")]
         public static void AirlineApplyCommand(Player player, int aid)
         {
