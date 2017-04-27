@@ -87,7 +87,8 @@ namespace core.Dialogs.PlayerDialogs
 
                 if (String.IsNullOrEmpty(args.InputText))
                 {
-                    player.Kick();
+                    player.SendClientMessage(Color.Red, $"ERROR: {Color.White.ToString()}The entered password is invalid!");
+                    register(player);
                     return;
                 }
 
@@ -150,7 +151,8 @@ namespace core.Dialogs.PlayerDialogs
 
                 if (String.IsNullOrEmpty(args.InputText))
                 {
-                    player.Kick();
+                    player.SendClientMessage(Color.Red, $"ERROR: {Color.White.ToString()}The entered password is invalid!");
+                    login(player);
                     return;
                 }
 
@@ -165,7 +167,8 @@ namespace core.Dialogs.PlayerDialogs
 
                 if (!Crypto.VerifyHashedPassword(user.password, args.InputText))
                 {
-                    player.Kick();
+                    player.SendClientMessage(Color.Red, $"ERROR: {Color.White.ToString()}The password you entered is incorrect and does not match, please try again!");
+                    login(player);
                     return;
                 }
 

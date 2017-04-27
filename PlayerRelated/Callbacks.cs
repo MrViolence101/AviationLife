@@ -34,11 +34,13 @@ namespace core.PlayerRelated
                     Kick();
                 }
                 playerDialogs.login(this);
+                Color = Color.White;
             }
             else
             {
                 ToggleSpectating(true);
                 playerDialogs.register(this);
+                Color = Color.White;
             }
 
             base.OnConnectedAsync(e);
