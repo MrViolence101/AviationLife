@@ -29,6 +29,7 @@ namespace core.Commands
         {
             if (processing.ValidateVariable(player, !player.isLoggedIn, "You need to be logged in!")) return;
             if (processing.ValidateVariable(player, player.alevel < 3, processing.adminPermissions)) return;
+            if (processing.ValidateVariable(player, amount < 0, "Invalid amount entered!")) return;
 
             receiver.Money += amount;
         }
