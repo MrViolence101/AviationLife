@@ -12,7 +12,7 @@ namespace core.DatabaseRelated
     {
         public MyDbContext Create(DbContextFactoryOptions options)
         {
-            const string db = "Server=localhost;Port=3306;Database=test;User ID=root;";
+            const string db = "Server=localhost;Port=27501;Database=test;User ID=root;Password=mypassword;";
 
             var optionsBuilder = new DbContextOptionsBuilder<MyDbContext>();
             optionsBuilder.UseMySQL(db);
