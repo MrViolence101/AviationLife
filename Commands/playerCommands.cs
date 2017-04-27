@@ -19,6 +19,13 @@ namespace core.Commands
 {
     class PlayerCommands
     {
+        [Command("kill")]
+        public static void KillCommand(Player player)
+        {
+            if (processing.ValidateVariable(player, !player.isLoggedIn, "You are not even logged in!")) return;
+
+            player.Health = 0.0f;
+        }
         [Command("apply")]
         public static void AirlineApplyCommand(Player player, int aid)
         {
