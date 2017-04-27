@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using SampSharp.Core;
 using SampSharp.Core.Logging;
 using SampSharp.GameMode;
+using SampSharp.GameMode.SAMP;
+using SampSharp.GameMode.World;
 using System;
 using System.Linq;
 
@@ -11,57 +13,25 @@ namespace core
 {
     internal class GameMode : BaseMode
     {
-
+        private Timer _timer;
         protected override void OnInitialized(EventArgs e)
         {
             base.OnInitialized(e);
-            
+           
             var context = new MyDbContextFactory().Create(new DbContextFactoryOptions());
-            
-             Console.WriteLine("LOADED!");
+
+            Console.WriteLine("LOADED!");
              this.SetGameModeText("LSRP v0.1");
-            var newairline = context.airlines.FirstOrDefault(x => x.airlineID == 2);
-            for (int i = 0; i < 6; i++)
-            {
-                var user = new User
-                {
-                username = "Johannes" + i,
-                password = "namakwa1012",
-                posx = 15.0f,
-                posy = 15.0f,
-                posz = 15.0f,
-                isOnline = false,
-                isBanned = false,
-                dob = DateTime.UtcNow,
-                airline = newairline,
-                alevel = 2,
-                arank = i+1 
-                };
-                context.players.Add(user);
-            }
 
-            for (int i = 0; i < 6; i++)
+            _timer = new Timer(TimeSpan.FromMinutes(1), true);
+            int count = processing.randomMessages().Count() - 1;
+            _timer.Tick += (sender, args) =>
             {
-                var user = new User
-                {
-                    username = "Johannes" + i,
-                    password = "namakwa1012",
-                    posx = 15.0f,
-                    posy = 15.0f,
-                    posz = 15.0f,
-                    isOnline = false,
-                    isBanned = false,
-                    dob = DateTime.UtcNow,
-                    airline = newairline,
-                    alevel = 2,
-                    arank = i+1
-                };
-                context.players.Add(user);
-            }
-            context.SaveChanges();
+                BasePlayer.SendClientMessageToAll(Color.SkyBlue, $"* Aviation Life: {Color.LightGray}{processing.randomMessages()[new Random().Next(0, count)]}");
+            };
         }
-
     }
+    
 
     internal class Program
     {

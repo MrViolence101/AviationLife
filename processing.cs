@@ -26,5 +26,12 @@ namespace core
                                             "Head Scripter", "Co-Owner", "Owner" };
             return alevels[alevel - 1];
         }
+
+        public static string[] randomMessages()
+        {
+            return new string[] {"You can use /cmds if you want to see what commands you can use.",
+                                "You can use /airlines to see what airlines are available for you to join.",
+                                "You can use /ma (myairline) to do certain operations inside of the airline you are part of."};
+        }
     }
 }

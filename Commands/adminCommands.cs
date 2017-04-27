@@ -25,10 +25,30 @@ namespace core.Commands
     class adminCommands
     {
 
+        [Command("acmds")]
+        public static void AdminCmdsCommand(Player player)
+        {
+            if (processing.ValidateVariable(player, !player.isLoggedIn, "You need to be logged in!")) return;
+            var sb = new StringBuilder();
+            sb.Append($"/asay, /setcash, /acreate, /aedit, /aleader, /usersearch, /asearch{Environment.NewLine}");
+            sb.Append($"/banlist, /oban, /warn, /setadmin, /kick, /ban");
+
+        }
+
+
+        [Command("asay")]
+        public static void AdminSayCommand(Player player, [Parameter(typeof(TextType))] string message)
+        {
+            if (processing.ValidateVariable(player, !player.isLoggedIn, "You need to be logged in!")) return;
+            if (processing.ValidateVariable(player, player.alevel < 1, processing.adminPermissions)) return;
+            if (processing.ValidateVariable(player, String.IsNullOrEmpty(message), "Invalid message provided!")) return;
+
+            BasePlayer.SendClientMessageToAll(Color.SkyBlue, $"* {processing.GetAdminStatus(player.alevel)} {player.Name}[{player.Id}]: {Color.White}{message}");
+        }
         [Command("setcash")]
         public static void SetCashCommand(Player player, Player receiver, int amount)
         {
-            if (processing.ValidateVariable(player, !player.isLoggedIn, "You need to be logged in!")) return;
+            
             if (processing.ValidateVariable(player, player.alevel < 3, processing.adminPermissions)) return;
             if (processing.ValidateVariable(player, amount < 0, "Invalid amount entered!")) return;
 
@@ -215,7 +235,7 @@ namespace core.Commands
         public static async void WarnPlayerCommandAsync(Player player, Player target, [Parameter(typeof(TextType))] string reason)
         {
             if (processing.ValidateVariable(player, !player.isLoggedIn, "You need to be logged in!")) return;
-            if (processing.ValidateVariable(player, player.alevel < 2, processing.adminPermissions)) return;
+            if (processing.ValidateVariable(player, player.alevel < 1, processing.adminPermissions)) return;
 
             if (processing.ValidateVariable(player, !target.isLoggedIn, "That player is not even logged in!")) return;
 
