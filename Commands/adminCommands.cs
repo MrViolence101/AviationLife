@@ -190,6 +190,31 @@ namespace core.Commands
 
             playerDialogs.BanList(player, context);
         }
+
+        [Command("unban")]
+        public static void UnbanCommand(Player player, string uname)
+        {
+            if (processing.ValidateVariable(player, !player.isLoggedIn, "You need to be logged in!")) return;
+            if (processing.ValidateVariable(player, player.alevel < 4, processing.adminPermissions)) return;
+
+            var context = new MyDbContextFactory().Create(new DbContextFactoryOptions());
+            var user = context.players.FirstOrDefault(x => x.username.Equals(uname));
+
+            if (processing.ValidateVariable(player, user == null, "This player doesn't even exist!")) return;
+            if (processing.ValidateVariable(player, !user.isBanned, "This player isn't even banned")) return;
+
+            user.isBanned = false;
+
+            var banRecord = context.bans.Include(x => x.player).FirstOrDefault(x => x.player.playerID == user.playerID);
+
+            if (processing.ValidateVariable(player, banRecord == null, "This player isn't even banned!")) return;
+
+            context.bans.Remove(banRecord);
+
+            context.SaveChanges();
+
+            player.SendClientMessage(Color.SkyBlue, $"* {user.username} {Color.White}has successfully been {Color.SkyBlue}unbanned {Color.White}from the server.");
+        }
         [Command("oban")]
         public static void OfflineBanPlayerCommand(Player theplayer, string uname, string reason)
         {
