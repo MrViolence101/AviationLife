@@ -50,7 +50,7 @@ namespace core.Commands
             if (airlineRanks == null || airlineRanks.Count < 1) return;
 
             var playersInAirline = context.players.Include(x => x.airline).Where(x => x.airline.airlineID == aid && x.isOnline).ToList();
-            if (playersInAirline == null || playersInAirline.Count < 1) return;
+            if (playersInAirline == null) return;
 
             var authPlayersInAirline = playersInAirline.Where(x => airlineRanks[x.arank - 1].hasAppAuth).Count();
 
