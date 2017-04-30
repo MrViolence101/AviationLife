@@ -117,7 +117,7 @@ namespace core.Dialogs.AirlineDialogs
                     if (airline == null) return;
 
                     airline.bankBalance = airline.bankBalance + donationAmount;
-                    context.SaveChangesAsync();
+                    context.SaveChanges();
 
                     player.Money = player.Money - donationAmount;
                     foreach (var p in Player.GetAll<Player>())

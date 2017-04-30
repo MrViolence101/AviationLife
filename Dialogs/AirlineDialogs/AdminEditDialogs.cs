@@ -98,7 +98,7 @@ namespace core.Dialogs.AirlineDialogs
                     }
                 }
 
-                context.SaveChangesAsync();
+                context.SaveChanges();
 
                 player.SendClientMessage(Color.SkyBlue, $"* {Color.White.ToString()}You successfully removed user {Color.SkyBlue.ToString()}" +
                                                         $"'{users[args.ListItem].username}' {Color.White.ToString()}from {Color.SkyBlue.ToString()}" +
@@ -186,7 +186,7 @@ namespace core.Dialogs.AirlineDialogs
                 if (processing.ValidateVariable(player, afunc.doesAirlineExistByName(args.InputText), "This airline already exist!")) return;
 
                 theairline.airlineName = args.InputText;
-                context.SaveChangesAsync();
+                context.SaveChanges();
 
                 player.SendClientMessage(Color.SkyBlue, $"* {Color.White.ToString()}Airline ID:{aid} name has successfully been changed to {Color.SkyBlue.ToString()}'{args.InputText}'");
                 aedit(player, context, aid);
@@ -207,7 +207,7 @@ namespace core.Dialogs.AirlineDialogs
                 if (processing.ValidateVariable(player, String.IsNullOrEmpty(args.InputText), "Invalid AMOTD Entered!")) return;
 
                 theairline.amotd = args.InputText;
-                context.SaveChangesAsync();
+                context.SaveChanges();
 
                 player.SendClientMessage(Color.SkyBlue, $"* {Color.White.ToString()}Airline ID:{aid} amotd has successfully been changed to {Color.SkyBlue.ToString()}'{args.InputText}'");
                 aedit(player, context, aid);

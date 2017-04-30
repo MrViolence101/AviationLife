@@ -44,7 +44,7 @@ namespace core.Commands
             };
 
             context.pendingApplications.Add(pending);
-            context.SaveChangesAsync();
+            context.SaveChanges();
 
             var PlayersAllowedToAcceptApps = Player.GetAll<Player>().Where(x => x.airlineRank == airline.AppAuthRank && x.airlineID == airline.airlineID).ToList();
             player.SendClientMessage(Color.LightGreen, $"* {Color.White.ToString()}You successfully applied for airline {Color.LightGreen.ToString()}'{airline.airlineName}'{Color.White.ToString()}, there are {PlayersAllowedToAcceptApps.Count} online to accept your application.");
