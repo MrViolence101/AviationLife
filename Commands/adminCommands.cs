@@ -79,7 +79,7 @@ namespace core.Commands
             receiver.airlineID = airline.airlineID;
             receiver.airlineRank = airlineRanks.Count();
 
-            context.SaveChangesAsync();
+            context.SaveChanges();
 
             player.SendClientMessage(Color.SkyBlue, $"* {Color.White.ToString()} You successfully made {Color.SkyBlue.ToString()}{receiver.Name} {Color.White.ToString()}the leader of airline, {Color.SkyBlue.ToString()}{airline.airlineName} [ID:{airline.airlineID}]");
             receiver.SendClientMessage(Color.SkyBlue, $"* Administrator {player.Name} {Color.White.ToString()}has made you the leader of {Color.SkyBlue.ToString()}{airline.airlineName} [ID:{airline.airlineID}]");
