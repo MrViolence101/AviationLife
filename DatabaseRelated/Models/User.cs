@@ -1,13 +1,17 @@
 ﻿using core.DatabaseRelated.Models.AirlineRelated;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace core.DatabaseRelated.Models
 {
     public class User
     {
-        public int playerID { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
+        public Guid playerID { get; set; }
         public string username { get; set; }
         public string password { get; set; }
         public DateTime dob { get; set;}

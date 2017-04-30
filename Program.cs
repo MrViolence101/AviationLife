@@ -23,7 +23,7 @@ namespace core
             Console.WriteLine("LOADED!");
              this.SetGameModeText("LSRP v0.1");
 
-            _timer = new Timer(TimeSpan.FromMinutes(1), true);
+            _timer = new Timer(TimeSpan.FromMinutes(1), false);
             int count = processing.randomMessages().Count() - 1;
             _timer.Tick += (sender, args) =>
             {
