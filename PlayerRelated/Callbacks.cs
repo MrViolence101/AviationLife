@@ -27,9 +27,7 @@ namespace core.PlayerRelated
                 var user = context.players.FirstOrDefault(x => x.username.Equals(Name));
                 if (user.isBanned)
                 {
-                    var bans = context.bans.FirstOrDefault(x => x.player.username.Equals(Name));
-                    SendClientMessage(Color.Red, $"* {Color.White.ToString()}Can't you remember? You have been {Color.Red.ToString()}banned {Color.White.ToString()}on {Color.Red.ToString()}{bans.banDate} Reason: {Color.White.ToString()}{bans.banReason}");
-
+                    playerDialogs.YouAreBannedAsync(this, context);
                     await Task.Delay(500);
                     Kick();
                 }

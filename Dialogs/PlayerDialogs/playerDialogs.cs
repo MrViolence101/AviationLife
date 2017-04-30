@@ -17,6 +17,26 @@ namespace core.Dialogs.PlayerDialogs
 {
     public class playerDialogs
     {
+        public static async void YouAreBannedAsync(Player player, MyDbContext context)
+        {
+            string msg = "";
+            var bannedUser = context.players.FirstOrDefault(x => x.username.Equals(player.Name));
+            var banRecordForUser = context.bans.Include(x => x.player).Include(x => x.admin).FirstOrDefault(x => x.player.playerID == bannedUser.playerID);
+
+            if (bannedUser == null) return;
+            if (banRecordForUser == null) return;
+
+            msg += $"{Color.Red}Banned Date: {Color.White}{banRecordForUser.banDate}{Environment.NewLine}";
+            msg += $"{Color.Red}Reason: {Color.White}{banRecordForUser.banReason}{Environment.NewLine}";
+            msg += $"{Color.Red}By Admin: {Color.White}{banRecordForUser.admin.username}{Environment.NewLine}{Environment.NewLine}";
+
+            msg += $"If you think you were banned for the wrong reasons.{Environment.NewLine}Please visit our forum and appeal your ban.";
+
+            var bannedMsg = new MessageDialog($"{Color.White}You are banned", msg, "Ok");
+
+            await bannedMsg.ShowAsync(player);
+
+        }
         public static void BanList(Player player, MyDbContext context)
         {
             var tablist = new TablistDialog("Banned Users", new string[] {"User", "Ban Date"}, "Select", "Cancel");
