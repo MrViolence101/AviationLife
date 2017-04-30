@@ -11,7 +11,7 @@ namespace core.DatabaseRelated.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        public Guid playerID { get; set; }
+        public int playerID { get; set; }
         public string username { get; set; }
         public string password { get; set; }
         public DateTime dob { get; set;}
