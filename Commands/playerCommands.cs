@@ -49,8 +49,12 @@ namespace core.Commands
             var airlineRanks = context.ranks.Include(x => x.airline).Where(x => x.airline.airlineID == airline.airlineID).ToList();
             if (airlineRanks == null || airlineRanks.Count < 1) return;
 
-            var PlayersAllowedToAcceptApps = Player.GetAll<Player>().Where(x => airlineRanks[x.airlineRank-1].hasAppAuth && x.airlineID == airline.airlineID).ToList();
-            player.SendClientMessage(Color.LightGreen, $"* {Color.White.ToString()}You successfully applied for airline {Color.LightGreen.ToString()}'{airline.airlineName}'{Color.White.ToString()}, there are {PlayersAllowedToAcceptApps.Count} online to accept your application.");
+            var playersInAirline = context.players.Include(x => x.airline).Where(x => x.airline.airlineID == aid && x.isOnline).ToList();
+            if (playersInAirline == null || playersInAirline.Count < 1) return;
+
+            var authPlayersInAirline = playersInAirline.Where(x => airlineRanks[x.arank - 1].hasAppAuth).Count();
+
+            player.SendClientMessage(Color.LightGreen, $"* {Color.White.ToString()}You successfully applied for airline {Color.LightGreen.ToString()}'{airline.airlineName}'{Color.White.ToString()}, there are {authPlayersInAirline} players online to accept your application.");
 
             foreach (var p in Player.GetAll<Player>())
             {
@@ -89,7 +93,7 @@ namespace core.Commands
             if (demoted == null) return;
 
             demoted.arank = receiver.airlineRank;
-            context.SaveChangesAsync();
+            context.SaveChanges();
 
             foreach (var p in Player.GetAll<Player>())
             {
@@ -129,7 +133,7 @@ namespace core.Commands
             if (promotedUser == null) return;
 
             promotedUser.arank = receiver.airlineRank;
-            context.SaveChangesAsync();
+            context.SaveChanges();
 
             foreach (var p in Player.GetAll<Player>())
             {
