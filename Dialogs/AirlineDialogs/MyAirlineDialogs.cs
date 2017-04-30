@@ -72,10 +72,10 @@ namespace core.Dialogs.AirlineDialogs
                     case 6:
                         MyAirline_Messages(player, context, aid);
                         break;
-                    case 8:
+                    case 7:
                         MyAirline_AppAuthPerm(player, context, aid);
                         break;
-                    case 7:
+                    case 8:
                         MyAirline_PendingApplications(player, context, aid);
                         break;
                 }
@@ -116,14 +116,19 @@ namespace core.Dialogs.AirlineDialogs
                 if (airlineRanks[args.ListItem].hasAppAuth)
                 {
                     airlineRanks[args.ListItem].hasAppAuth = false;
+
+                    context.SaveChanges();
+                    tablist.Show(player);
                 }
                 else
                 {
                     airlineRanks[args.ListItem].hasAppAuth = true;
+
+                    context.SaveChanges();
+                    tablist.Show(player);
                 }
 
-                context.SaveChanges();
-                tablist.Show(player);
+                
             };
 
             tablist.Show(player);
