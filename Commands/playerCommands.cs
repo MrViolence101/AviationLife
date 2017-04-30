@@ -46,47 +46,24 @@ namespace core.Commands
             context.pendingApplications.Add(pending);
             context.SaveChanges();
 
-            var PlayersAllowedToAcceptApps = Player.GetAll<Player>().Where(x => x.airlineRank == airline.AppAuthRank && x.airlineID == airline.airlineID).ToList();
+            var airlineRanks = context.ranks.Include(x => x.airline).Where(x => x.airline.airlineID == airline.airlineID).ToList();
+            if (airlineRanks == null || airlineRanks.Count < 1) return;
+
+            var PlayersAllowedToAcceptApps = Player.GetAll<Player>().Where(x => airlineRanks[x.airlineRank-1].hasAppAuth && x.airlineID == airline.airlineID).ToList();
             player.SendClientMessage(Color.LightGreen, $"* {Color.White.ToString()}You successfully applied for airline {Color.LightGreen.ToString()}'{airline.airlineName}'{Color.White.ToString()}, there are {PlayersAllowedToAcceptApps.Count} online to accept your application.");
 
             foreach (var p in Player.GetAll<Player>())
             {
                 if (p.airlineID == airline.airlineID)
                 {
-                    if (p.airlineRank == airline.AppAuthRank)
+                    if (airlineRanks[p.airlineRank-1].hasAppAuth)
                     {
                         p.SendClientMessage(Color.Orange, $"* {player.Name} {Color.White.ToString()}has just submitted an application to join the airline. {Color.Orange.ToString()}/ma {Color.White.ToString()}and accept.");
                     }
                 }
             }
         }
-        [Command("appauth")]
-        public static void ApplicationAcceptanceAuthorityCommand(Player player, int rank)
-        {
-            if (processing.ValidateVariable(player, !player.isLoggedIn, "You are not even logged in!")) return;
-            if (processing.ValidateVariable(player, player.airlineID == null, "Yo do not belong to any airline!")) return;
-
-            var context = new MyDbContextFactory().Create(new DbContextFactoryOptions());
-            var airline = context.airlines.FirstOrDefault(x => x.airlineID == player.airlineID);
-            if (airline == null) return;
-
-            
-            var airlineRanks = context.ranks.Include(x => x.airline).Where(x => x.airline.airlineID == player.airlineID).ToList();
-            if (processing.ValidateVariable(player, player.airlineRank != airlineRanks.Count, "You need to be the leader to use this command!")) return;
-            if (processing.ValidateVariable(player, rank < 1 || rank > airlineRanks.Count, "Invalid rank entered")) return;
-
-            airline.AppAuthRank = rank;
-            context.SaveChangesAsync();
-
-            foreach (var p in Player.GetAll<Player>())
-            {
-                if (p.airlineID == player.airlineID)
-                {
-                    p.SendClientMessage(Color.LightGreen, $"* {Color.White.ToString()}A {Color.LightGreen.ToString()}{airlineRanks[rank-1].rankName} {Color.White.ToString()}can now accept submitted applications for applicants.");
-                }
-            }
-
-        }
+     
         [Command("ademote")]
         public static void AirlineDemoteCommand(Player player, Player receiver)
         {

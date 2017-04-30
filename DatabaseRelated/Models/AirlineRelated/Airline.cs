@@ -9,7 +9,6 @@ namespace core.DatabaseRelated.Models.AirlineRelated
         public int airlineID { get; set; }
         public string airlineName { get; set; }
         public string amotd { get; set; }
-        public int AppAuthRank { get; set; }
         public int bankBalance { get; set; }
     }
 }

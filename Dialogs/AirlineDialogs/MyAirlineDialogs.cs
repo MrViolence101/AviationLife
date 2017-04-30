@@ -35,7 +35,8 @@ namespace core.Dialogs.AirlineDialogs
             var airline = context.airlines.FirstOrDefault(x => x.airlineID == aid);
             if (airline == null) return;
 
-            if (airline.AppAuthRank == player.airlineRank)
+
+            if (airlineRanks[player.airlineRank-1].hasAppAuth)
             {
                 var pendingApplications = context.pendingApplications.Include(x => x.airline).Include(x => x.applyingPlayer).Where(x => x.airline.airlineID == aid).ToList();
                 if (pendingApplications != null && pendingApplications.Count > 0)
