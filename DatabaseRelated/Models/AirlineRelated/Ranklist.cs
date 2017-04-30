@@ -9,6 +9,7 @@ namespace core.DatabaseRelated.Models.AirlineRelated
         public int rankID { get; set; }
         public string rankName { get; set; }
         public int rankSpot { get; set; }
+        public bool hasAppAuth { get; set; }
 
         public Airline airline { get; set; }
     }

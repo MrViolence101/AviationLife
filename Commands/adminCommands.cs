@@ -156,7 +156,7 @@ namespace core.Commands
             };
 
             context.airlines.Add(airline);
-            context.SaveChangesAsync();
+            context.SaveChanges();
 
             var airlineForRank = context.airlines.FirstOrDefault(x => x.airlineName.Equals(airlinename));
             if (airlineForRank == null) return;
@@ -172,7 +172,7 @@ namespace core.Commands
                 context.ranks.Add(rank);
             }
 
-            context.SaveChangesAsync();
+            context.SaveChanges();
 
             player.SendClientMessage(Color.SkyBlue, $"* {Color.White.ToString()}You successfully added a new " +
                                                       $"{Color.SkyBlue.ToString()}airline {Color.White.ToString()}to the system." +

@@ -27,6 +27,11 @@ namespace core.Dialogs.AirlineDialogs
             list.AddItem("Donations");
             list.AddItem("Messages");
 
+            if (player.airlineRank == airlineRanks.Count)
+            {
+                list.AddItem($"Application Authorization Permissions");
+            }
+
             var airline = context.airlines.FirstOrDefault(x => x.airlineID == aid);
             if (airline == null) return;
 
@@ -39,6 +44,8 @@ namespace core.Dialogs.AirlineDialogs
                 }
 
             }
+            
+            
 
             list.Response += (sender, args) =>
             {
@@ -65,6 +72,9 @@ namespace core.Dialogs.AirlineDialogs
                     case 6:
                         MyAirline_Messages(player, context, aid);
                         break;
+                    case 8:
+                        MyAirline_AppAuthPerm(player, context, aid);
+                        break;
                     case 7:
                         MyAirline_PendingApplications(player, context, aid);
                         break;
@@ -73,7 +83,51 @@ namespace core.Dialogs.AirlineDialogs
             list.Show(player);
         }
 
+        public static void MyAirline_AppAuthPerm(Player player, MyDbContext context, int aid)
+        {
+            var airline = context.airlines.FirstOrDefault(x => x.airlineID == aid);
+            if (airline == null) return;
 
+            var airlineRanks = context.ranks.Include(x => x.airline).Where(x => x.airline.airlineID == aid).OrderByDescending(x => x.rankSpot).ToList();
+            if (airlineRanks == null) return;
+            if (airlineRanks.Count < 1) return;
+
+            var tablist = new TablistDialog($"{Color.LightGreen}Application Authorization {Color.White}- Ranks", new string[] { "Spot", "Rank", "Auth Status" }, "Change", "Cancel");
+
+            foreach (var rank in airlineRanks)
+            {
+                if (rank.hasAppAuth)
+                {
+                    tablist.Add(new string[] { rank.rankSpot.ToString(), rank.rankName, $"{Color.LightGreen}Yes" });
+                }
+                else
+                {
+                    tablist.Add(new string[] { rank.rankSpot.ToString(), rank.rankName, $"{Color.Red}No" });
+                }
+                
+            }
+
+            tablist.Response += (sender, args) =>
+            {
+                if (args.DialogButton == DialogButton.Right) return;
+
+                if (airlineRanks[args.ListItem] == null) return;
+                
+                if (airlineRanks[args.ListItem].hasAppAuth)
+                {
+                    airlineRanks[args.ListItem].hasAppAuth = false;
+                }
+                else
+                {
+                    airlineRanks[args.ListItem].hasAppAuth = true;
+                }
+
+                context.SaveChanges();
+                tablist.Show(player);
+            };
+
+            tablist.Show(player);
+        }
         public static void MyAirline_Messages(Player player, MyDbContext context, int aid)
         {
 
