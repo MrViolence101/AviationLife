@@ -119,14 +119,14 @@ namespace core.Dialogs.AirlineDialogs
                     airlineRanks[args.ListItem].hasAppAuth = false;
 
                     context.SaveChanges();
-                    tablist.Show(player);
+                    MyAirline_AppAuthPerm(player, context, aid);
                 }
                 else
                 {
                     airlineRanks[args.ListItem].hasAppAuth = true;
 
                     context.SaveChanges();
-                    tablist.Show(player);
+                    MyAirline_AppAuthPerm(player, context, aid);
                 }
 
                 
