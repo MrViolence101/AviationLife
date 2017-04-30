@@ -8,8 +8,8 @@ using core.DatabaseRelated.Models;
 namespace core.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20170430131218_initialv11")]
-    partial class initialv11
+    [Migration("20170430131601_initialv1")]
+    partial class initialv1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

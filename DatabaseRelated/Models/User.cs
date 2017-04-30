@@ -9,8 +9,7 @@ namespace core.DatabaseRelated.Models
 {
     public class User
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Key]
+
         public int playerID { get; set; }
         public string username { get; set; }
         public string password { get; set; }
