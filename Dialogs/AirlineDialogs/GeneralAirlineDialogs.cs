@@ -174,6 +174,8 @@ namespace core.Dialogs.AirlineDialogs
 
                 await context.pendingApplications.AddAsync(pendingApp);
 
+                await context.SaveChangesAsync();
+
                 var airlineRanks = context.ranks.Include(x => x.airline).Where(x => x.airline.airlineID == chosenAirline.airlineID).ToList();
                 if (airlineRanks == null || airlineRanks.Count < 1) return;
 
