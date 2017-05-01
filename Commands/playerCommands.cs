@@ -24,49 +24,6 @@ namespace core.Commands
         {
             player.Health = 0.0f;
         }
-        [Command("apply")]
-        public static void AirlineApplyCommand(Player player, int aid)
-        {
-            if (processing.ValidateVariable(player, !player.isLoggedIn, "You are not even logged in!")) return;
-            var context = new MyDbContextFactory().Create(new DbContextFactoryOptions());
-
-            var airline = context.airlines.FirstOrDefault(x => x.airlineID == aid);
-            if (airline == null) return;
-
-            var user = context.players.FirstOrDefault(x => x.username.Equals(player.Name));
-            if (user == null) return;
-
-            var pending = new PendingAirlineApp
-            {
-                airline = airline,
-                applyingPlayer = user,
-                DateApplied = DateTime.UtcNow              
-            };
-
-            context.pendingApplications.Add(pending);
-            context.SaveChanges();
-
-            var airlineRanks = context.ranks.Include(x => x.airline).Where(x => x.airline.airlineID == airline.airlineID).ToList();
-            if (airlineRanks == null || airlineRanks.Count < 1) return;
-
-            var playersInAirline = context.players.Include(x => x.airline).Where(x => x.airline.airlineID == aid && x.isOnline).ToList();
-            if (playersInAirline == null) return;
-
-            var authPlayersInAirline = playersInAirline.Where(x => airlineRanks[x.arank - 1].hasAppAuth).Count();
-
-            player.SendClientMessage(Color.LightGreen, $"* {Color.White.ToString()}You successfully applied for airline {Color.LightGreen.ToString()}'{airline.airlineName}'{Color.White.ToString()}, there are {authPlayersInAirline} players online to accept your application.");
-
-            foreach (var p in Player.GetAll<Player>())
-            {
-                if (p.airlineID == airline.airlineID)
-                {
-                    if (airlineRanks[p.airlineRank-1].hasAppAuth)
-                    {
-                        p.SendClientMessage(Color.Orange, $"* {player.Name} {Color.White.ToString()}has just submitted an application to join the airline. {Color.Orange.ToString()}/ma {Color.White.ToString()}and accept.");
-                    }
-                }
-            }
-        }
      
         [Command("ademote")]
         public static void AirlineDemoteCommand(Player player, Player receiver)

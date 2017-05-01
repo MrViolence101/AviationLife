@@ -97,7 +97,7 @@ namespace core.Dialogs.AirlineDialogs
             if (airlineRanks == null) return;
             if (airlineRanks.Count < 1) return;
 
-            var tablist = new TablistDialog($"{Color.LightGreen}Application Authorization {Color.White}- Ranks", new string[] { "Spot", "Rank", "Auth Status" }, "Change", "Cancel");
+            var tablist = new TablistDialog($"{Color.LightGreen}Application Authorization {Color.White}- Ranks", new string[] { "Spot", "Rank", "Auth Status" }, "Change", "Back");
 
             foreach (var rank in airlineRanks)
             {
@@ -114,7 +114,7 @@ namespace core.Dialogs.AirlineDialogs
 
             tablist.Response += (sender, args) =>
             {
-                if (args.DialogButton == DialogButton.Right) return;
+                if (args.DialogButton == DialogButton.Right) MyAirlineAsync(player, context, aid);
 
                 if (airlineRanks[args.ListItem] == null) return;
                 
