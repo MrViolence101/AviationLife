@@ -159,7 +159,7 @@ namespace core.Commands
             var airline = context.airlines.FirstOrDefault(x => x.airlineID == player.airlineID);
             if (airline == null) return;
 
-            MyAirlineDialogs.MyAirline(player, context, airline.airlineID);
+            MyAirlineDialogs.MyAirlineAsync(player, context, airline.airlineID);
 
 
         }

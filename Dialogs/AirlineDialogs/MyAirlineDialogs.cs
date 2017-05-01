@@ -13,75 +13,79 @@ namespace core.Dialogs.AirlineDialogs
 {
     public class MyAirlineDialogs
     {
-        public static void MyAirline(Player player, MyDbContext context, int aid)
+        public static async void MyAirlineAsync(Player player, MyDbContext context, int aid)
         {
             var list = new ListDialog("My Airline", "Edit", "Cancel");
 
             var airlineRanks = context.ranks.Include(x => x.airline).Where(x => x.airline.airlineID == aid).ToList();
+            var actions = new List<Action>();
 
             list.AddItem("Airline Information");
+            actions.Add(() =>
+                MyAirline_Information(player, context, aid)
+            );
+
             list.AddItem("Airline History");
+            actions.Add(() =>
+                MyAirline_History(player, context, aid)
+            );
+
+
             list.AddItem("Announcements");
+            actions.Add(() =>
+                MyAirline_Announcements(player, context, aid)
+            );
+
+
             list.AddItem("Employee List");
+            actions.Add(() =>
+                MyAirline_EmployeeList(player, context, aid)
+            );
+
             list.AddItem("Online Employees");
+            actions.Add(() =>
+                MyAirline_OnlineEmployees(player, context, aid)
+            );
+
             list.AddItem("Donations");
+            actions.Add(() =>
+                MyAirline_Donations(player, context, aid)
+            );
+
             list.AddItem("Messages");
+            actions.Add(() =>
+                MyAirline_Messages(player, context, aid)
+            );
 
             if (player.airlineRank == airlineRanks.Count)
             {
-                list.AddItem($"Application Authorization Permissions");
+                list.AddItem("Application Authorization");
+                actions.Add(() =>
+                    MyAirline_AppAuthPerm(player, context, aid)
+                );
             }
 
             var airline = context.airlines.FirstOrDefault(x => x.airlineID == aid);
             if (airline == null) return;
 
 
-            if (airlineRanks[player.airlineRank-1].hasAppAuth)
+            if (airlineRanks[player.airlineRank - 1].hasAppAuth)
             {
                 var pendingApplications = context.pendingApplications.Include(x => x.airline).Include(x => x.applyingPlayer).Where(x => x.airline.airlineID == aid).ToList();
                 if (pendingApplications != null && pendingApplications.Count > 0)
                 {
-                    list.AddItem($"{Color.White.ToString()}Pending Applications ({Color.Orange.ToString()}{pendingApplications.Count}{Color.White.ToString()})");
+                    list.AddItem($"{ Color.White.ToString()}Pending Applications({ Color.Orange.ToString()}{ pendingApplications.Count}{ Color.White.ToString()})");
+                    actions.Add(() =>
+                       MyAirline_PendingApplications(player, context, aid)
+                    );
                 }
-
             }
-            
-            
 
-            list.Response += (sender, args) =>
-            {
-                switch (args.ListItem)
-                {
-                    case 0:
-                        MyAirline_Information(player, context, aid);
-                        break;
-                    case 1:
-                        MyAirline_History(player, context, aid);
-                        break;
-                    case 2:
-                        MyAirline_Announcements(player, context, aid);
-                        break;
-                    case 3:
-                        MyAirline_EmployeeList(player, context, aid);
-                        break;
-                    case 4:
-                        MyAirline_OnlineEmployees(player, context, aid);
-                        break;
-                    case 5:
-                        MyAirline_Donations(player, context, aid);
-                        break;
-                    case 6:
-                        MyAirline_Messages(player, context, aid);
-                        break;
-                    case 7:
-                        MyAirline_AppAuthPerm(player, context, aid);
-                        break;
-                    case 8:
-                        MyAirline_PendingApplications(player, context, aid);
-                        break;
-                }
-            };
-            list.Show(player);
+            var e = await list.ShowAsync(player);
+
+            if (e.DialogButton == DialogButton.Right) return;
+
+            actions[e.ListItem]();
         }
 
         public static void MyAirline_AppAuthPerm(Player player, MyDbContext context, int aid)
@@ -203,7 +207,7 @@ namespace core.Dialogs.AirlineDialogs
             if (airlineUsers.Count < 1)
             {
                 player.SendClientMessage(Color.Red, $"ERROR: {Color.White.ToString()}There are no employees for this airline!");
-                MyAirline(player, context, aid);
+                MyAirlineAsync(player, context, aid);
                 return;
             }
 
@@ -341,7 +345,7 @@ namespace core.Dialogs.AirlineDialogs
             if (airlineUsers == null || airlineUsers.Count < 1)
             {
                 player.SendClientMessage(Color.Red, $"ERROR: {Color.White.ToString()}No users of this airline are online!");
-                MyAirline(player, context, aid);
+                MyAirlineAsync(player, context, aid);
                 return;
             }
 
