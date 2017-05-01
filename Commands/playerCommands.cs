@@ -24,7 +24,14 @@ namespace core.Commands
         {
             player.Health = 0.0f;
         }
-     
+        [Command("airlines")]
+        public static void AirlinesCommand(Player player)
+        {
+            if (processing.ValidateVariable(player, !player.isLoggedIn, "You are not even logged in!")) return;
+            var context = new MyDbContextFactory().Create(new DbContextFactoryOptions());
+            GeneralAirlineDialogs.Airlines(player, context);
+        }
+
         [Command("ademote")]
         public static void AirlineDemoteCommand(Player player, Player receiver)
         {
